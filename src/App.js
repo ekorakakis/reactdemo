@@ -11,7 +11,8 @@ class App extends Component {
       { name: 'Max2', age: 28 }, 
       { name: 'Manu', age: 29 }, 
       { name: 'Stephanie', age: 26 }
-    ]
+    ],
+    showPersons: false
   }
 
   switchNameHandler = (newName) => {
@@ -36,6 +37,14 @@ class App extends Component {
     })
   }
 
+  togglePersonsHandler = () => {
+    // this syntax means that "this" means this class
+    const doesShow = this.state.showPersons;
+    this.setState({showPersons: !doesShow});
+
+    // {this.state.showPersons ? : null}
+  }
+
   render() {
     const style={
       backgroundColour: 'white',
@@ -45,23 +54,28 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {this.state.persons.map(person => {
+            // gets executed for every "person" in the array (the state array)
+            return <Person 
+              name={person.name}
+              age={person.age} />
+          })}
+        </div> 
+      );
+    }
+
     return (
       <div className="App">
         <h1>Hi, I am a React App</h1>
         <p>This is really working!</p>
         <button style={style}
-              onClick={()=> this.switchNameHandler('Kitsos')}>Switch Name</button>
-        <Person 
-          name={this.state.persons[0].name} 
-          age={this.state.persons[0].age} />
-        <Person 
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age} 
-          click={this.switchNameHandler.bind(this, 'Manousos')}
-          changed={this.nameChangedHandler}>My hobbies</Person>
-        <Person 
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age} />
+          onClick={this.togglePersonsHandler}>Toggle names</button>
+        {persons}
       </div>
     );
 
