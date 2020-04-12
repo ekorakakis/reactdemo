@@ -15,16 +15,30 @@ class App extends Component {
     showPersons: false
   }
 
+  /*
   switchNameHandler = (newName) => {
     console.log('was clicked');
     // DON'T DO THIS: this.state.persons[0].name='Jonathan';
     this.setState({
       persons: [
         { name: newName, age: 28 }, 
-        { name: 'Manus', age: 29 }, 
+        { name: 'Manus', age: 29 },   
         { name: 'Stephanie', age: 26 }
       ]
     })
+  }
+  */
+  
+  deletePersonHandler = (personIndex) => {
+    // const persons = this.state.persons;
+    // reference copy
+
+    // complete copy
+    // const persons = this.state.persons.slice();
+    // or by using the spreads operator in a new array
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons})
   }
 
   nameChangedHandler = (event) => {
@@ -59,9 +73,10 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(person => {
+          {this.state.persons.map((person, index) => {
             // gets executed for every "person" in the array (the state array)
-            return <Person 
+            return <Person
+              click={() => this.deletePersonHandler(index)} 
               name={person.name}
               age={person.age} />
           })}
