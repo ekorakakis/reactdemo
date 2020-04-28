@@ -1,24 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.css';
 import Person from './Person/Person';
-
-// Different approaches to styling:
-// import Radium, { StyleRoot } from 'radium'
-// import styled from 'styled-components';
-
-/* const StyledButton = styled.button`
-  background-color: ${props => props.alt ? 'red' : 'green'};
-  color: white;
-  font: inherit;
-  border: 1px solid blue;
-  padding: 8px;
-  cursor: pointer;
-  
-  &:hover {
-    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-    color: black;
-  }
-`; */
 
 class App extends Component {
   // state: only works in components (only when extends components)
@@ -31,26 +13,13 @@ class App extends Component {
     showPersons: false
   }
 
-  /*
-  switchNameHandler = (newName) => {
-    console.log('was clicked');
-    // DON'T DO THIS: this.state.persons[0].name='Jonathan';
-    this.setState({
-      persons: [
-        { name: newName, age: 28 }, 
-        { name: 'Manus', age: 29 },   
-        { name: 'Stephanie', age: 26 }
-      ]
-    })
-  }
-  */
-
   deletePersonHandler = (personIndex) => {
-    // const persons = this.state.persons;
     // reference copy
+    // const persons = this.state.persons;
 
     // complete copy
     // const persons = this.state.persons.slice();
+
     // or by using the spreads operator in a new array
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
@@ -61,9 +30,6 @@ class App extends Component {
     const personIndex = this.state.persons.findIndex(p => {
       return p.id === id;
     });
-
-    // const person = this.state.persons[personIndex]; - reference or
-    // const person = Object.assign({}, this.state.persons[personIndex]);
 
     // spread operator
     const person = {
@@ -82,25 +48,11 @@ class App extends Component {
     // this syntax means that "this" means this class
     const doesShow = this.state.showPersons;
     this.setState({ showPersons: !doesShow });
-
-    // {this.state.showPersons ? : null}
   }
 
   render() {
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    };
-
     let persons = null;
+    let btnClasses = '';
 
     if (this.state.showPersons) {
       persons = (
@@ -117,72 +69,30 @@ class App extends Component {
         </div>
       );
 
-      // style.backgroundColor = 'red';
-      // style[':hover'] = {
-      //   backgroundColor: 'salmon',
-      //   color: 'black'
-      // }
+      btnClasses = classes.Red;
     }
 
     // let classes = ['red', 'bold'].join(' ');
-    const classes = [];
+    const assignedClasses = [];
 
     if (this.state.persons.length <= 2) {
-      classes.push('red'); // classes = ['red']
+      assignedClasses.push(classes.red); // classes = ['red']
     }
     if (this.state.persons.length <= 1) {
-      classes.push('bold'); // classes = ['red', 'bold']
+      assignedClasses.push(classes.bold); // classes = ['red', 'bold']
     }
 
-    // StyleRoot required for media queries (a radium thing)
-    // for wrapping around the entire application
     return (
-      <div className="App">
+      <div className={classes.App}>
         <h1>Hi, I am a React App</h1>
-        <p className={classes.join(' ')}>This is really working!</p>
-        <button alt={this.state.showPersons} onClick={this.togglePersonsHandler}>
+        <p className={assignedClasses.join(' ')}>This is really working!</p>
+        <button className={btnClasses} onClick={this.togglePersonsHandler}>
           Toggle names
         </button>
         {persons}
       </div>
     );
-
-    // return React.createElement('div', {className:'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
-
-  /*const app = props => {
-    const [ personsState, setPersonsState] = useState({
-      persons: [
-        { name: 'Max24', age: 28 }, 
-        { name: 'Manus', age: 29 }, 
-        { name: 'Stephanie', age: 26 }
-      ]
-    });
-  
-    console.log(personsState);
-  
-    const switchNameHandler = () => {
-      console.log('was clicked');
-      // DON'T DO THIS: this.state.persons[0].name='Jonathan';
-      setPersonsState({
-        persons: [
-          { name: 'Max24asas', age: 28 }, 
-          { name: 'Manus', age: 29 }, 
-          { name: 'Stephanie', age: 26 }
-        ]
-      });
-    };
-  
-    return (
-      <div className="App">
-        <h1>Hi, I am a React App</h1>
-        <p>This is really working!</p>
-        <button onClick={switchNameHandler}>Switch Name</button>
-        <Person name={personsState.persons[0].name} age={personsState.persons[0].age} />
-        <Person name={personsState.persons[1].name} age={personsState.persons[1].age} />
-        <Person name={personsState.persons[2].name} age={personsState.persons[2].age} />
-      </div>
-    );*/
 }
 
 // export default Radium(App);
