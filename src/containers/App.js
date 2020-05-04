@@ -1,7 +1,9 @@
+// class-based component (for state management)
+
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
   // state: only works in components (only when extends components)
@@ -53,44 +55,20 @@ class App extends Component {
 
   render() {
     let persons = null;
-    let btnClasses = '';
-
+    
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            // gets executed for every "person" in the array (the state array)
-            return <ErrorBoundary key={person.id}>
-              <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
-                changed={(event) => this.nameChangedHandler(event, person.id)} />
-              </ErrorBoundary>
-          })}
-        </div>
-      );
-
-      btnClasses = classes.Red;
-    }
-
-    // let classes = ['red', 'bold'].join(' ');
-    const assignedClasses = [];
-
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.red); // classes = ['red']
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.bold); // classes = ['red', 'bold']
+      persons = <Persons
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler} />;
     }
 
     return (
       <div className={classes.App}>
-        <h1>Hi, I am a React App</h1>
-        <p className={assignedClasses.join(' ')}>This is really working!</p>
-        <button className={btnClasses} onClick={this.togglePersonsHandler}>
-          Toggle names
-        </button>
+        <Cockpit 
+          showPersons={this.state.showPersons}
+          persons={this.state.persons} 
+          clicked={this.togglePersonsHandler} />
         {persons}
       </div>
     );
