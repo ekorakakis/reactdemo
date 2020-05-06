@@ -6,6 +6,13 @@ import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
+
+  // optional unless you want to do something at construction
+  constructor(props) {
+    super(props);
+    console.log('[App.js] constructor');
+  }
+
   // state: only works in components (only when extends components)
   state = {
     persons: [
@@ -14,6 +21,11 @@ class App extends Component {
       { id: 'werd', name: 'Stephanie', age: 26 }
     ],
     showPersons: false
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDervicedStateFromProps', props);
+    return state;
   }
 
   deletePersonHandler = (personIndex) => {
@@ -27,6 +39,14 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({ persons: persons })
+  }
+
+  // componentWillMount() {
+  //   console.log('[App.js] componentWillMount');
+  // }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
   }
 
   nameChangedHandler = (event, id) => {
@@ -54,6 +74,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('[App.js] render');
     let persons = null;
     
     if (this.state.showPersons) {
@@ -66,6 +87,7 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <Cockpit 
+          title={this.props.appTitle}
           showPersons={this.state.showPersons}
           persons={this.state.persons} 
           clicked={this.togglePersonsHandler} />
