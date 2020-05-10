@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Person from './Person/Person';
 
 // functional component (for UI/rendering)
 // const persons = (props) => {
-class Persons extends Component {
+
+// PureComponent basically implements a shoudComponentUpdate with full checks on all props.
+class Persons extends PureComponent {
 
     // static getDerivedStateFromProps(props, state) {
     //     console.log('[Persons.js] getDerivedStateFromProps');
@@ -14,11 +16,15 @@ class Persons extends Component {
     //     console.log('[Persons.js] componentWillReceiveProps', props);
     // }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    /*
+        With Component
+        shouldComponentUpdate(nextProps, nextState) {
         console.log('[Persons.js] shouldComponentUpdate');
         // compare the pointer of the array (not the actually array)!
-        return (nextProps.persons !== this.props.persons);
-    }
+        return (nextProps.persons !== this.props.persons || 
+                nextProps.changed !== this.props.changed ||
+                nextProps.clicked !== this.props.clicked);
+    }*/
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
         console.log('[Persons.js] getSnapshotBeforeUpdate');
