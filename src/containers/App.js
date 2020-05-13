@@ -4,7 +4,14 @@ import React, { Component } from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
-import WithClass from '../hoc/WithClass';
+
+// for functional component usage:
+// import WithClass from '../hoc/WithClass';
+
+// for normal function usage:
+import withClass from '../hoc/withClass';
+
+import Auxiliary from '../hoc/Auxiliary';
 
 class App extends Component {
 
@@ -22,7 +29,8 @@ class App extends Component {
       { id: 'werd', name: 'Stephanie', age: 26 }
     ],
     showPersons: false,
-    showCockpit: true
+    showCockpit: true,
+    changeCounter: 0
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -75,7 +83,16 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({ persons: persons });
+    // this is not really a synchronous call - it is getting scheduled to be executed ...
+    // this.setState({ persons: persons, changeCounter: this.state.changeCounter + 1 });
+
+    // when depending to the previous state this is the way to do it:
+    this.setState((prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1
+      };
+    });
   }
 
   togglePersonsHandler = () => {
@@ -96,7 +113,9 @@ class App extends Component {
     }
 
     return (
-      <WithClass classes={classes.App}>
+      /* If you are using the functional HOC then wrap the whole thing with it like this:
+      <WithClass classes={classes.App}>*/
+      <Auxiliary>
         <button 
           onClick={() => {
             this.setState({showCockpit:false})
@@ -112,10 +131,16 @@ class App extends Component {
             clicked={this.togglePersonsHandler} />
             : null}
         {persons}
-      </WithClass>
+      </Auxiliary>
     );
   }
 }
 
+// css management:
 // export default Radium(App);
-export default App;
+
+// using the default way of exporting:
+// export default App;
+
+// using the function style HOC:
+export default withClass(App, classes.App);
